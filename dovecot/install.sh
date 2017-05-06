@@ -34,7 +34,6 @@ submission inet n       -       -       -       -       smtpd
 echo "
 #Automatic added by script for auto install mail server.
 protocols = imap pop3 lmtp sieve	
-ssl = required
 ssl_cert = <$SSL_CA_BUNDLE_FILE
 ssl_key = <$SSL_PRIVATE_KEY_FILE
 " >> /etc/dovecot/dovecot.conf
