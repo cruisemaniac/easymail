@@ -7,7 +7,7 @@ if (($(($(free -mt|awk '/^Total:/{print $2}')*1)) <= 700)); then
    exit;
 fi
 
-# run only once 
+# run only once
 ALREADY_RUN_POST_INSTALL_FILE="/opt/easymail/already-run-post-install.txt"
 
 if [ ! -e "$ALREADY_RUN_POST_INSTALL_FILE" ]; then
@@ -20,7 +20,7 @@ localhost
   chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
 fi
 
-bash /run.sh; 
+bash /run.sh;
 
 if [ -e "$ALREADY_RUN_POST_INSTALL_FILE" ]; then
   exit;
@@ -96,8 +96,8 @@ postconf -e smtpd_tls_cert_file=$SSL_CA_BUNDLE_FILE
 postconf -e smtpd_tls_key_file=$SSL_PRIVATE_KEY_FILE
 
 # new SSL location for Nginx
-sed -i -e "s#ssl_certificate .*#ssl_certificate $SSL_CA_BUNDLE_FILE;#g" /etc/nginx/sites-enabled/roundcube
-sed -i -e "s#ssl_certificate_key .*#ssl_certificate_key $SSL_PRIVATE_KEY_FILE;#g" /etc/nginx/sites-enabled/roundcube
+# sed -i -e "s#ssl_certificate .*#ssl_certificate $SSL_CA_BUNDLE_FILE;#g" /etc/nginx/sites-enabled/roundcube
+# sed -i -e "s#ssl_certificate_key .*#ssl_certificate_key $SSL_PRIVATE_KEY_FILE;#g" /etc/nginx/sites-enabled/roundcube
 
 # new SSL location for Dovecot
 sed -i -e "s#ssl_cert .*#ssl_cert = <$SSL_CA_BUNDLE_FILE#g" /etc/dovecot/dovecot.conf
@@ -106,14 +106,14 @@ sed -i -e "s#ssl_key .*#ssl_key = <$SSL_PRIVATE_KEY_FILE#g" /etc/dovecot/dovecot
 # Set HOSTNAME for auto configurations
 set_hostname /usr/share/nginx/autoconfig_and_autodiscover/autoconfig.php
 set_hostname /usr/share/nginx/autoconfig_and_autodiscover/autodiscover.php
-	
+
 # Set HOSTNAME for Roundcube
 set_hostname /etc/nginx/sites-enabled/roundcube
 
 # Set HOSTNAME for Postfix
 debconf-set-selections <<< "postfix postfix/mailname string $HOSTNAME"
 
-# Set HOSTNAME for MySQL 
+# Set HOSTNAME for MySQL
 export ADMIN_EMAIL="admin@$HOSTNAME"
 mysql -h $MYSQL_HOSTNAME -u$ROOT_MYSQL_USERNAME -p$OLD_ROOT_MYSQL_PASSWORD << EOF
 
@@ -154,10 +154,10 @@ apply_easymail_configs /etc/postfix/mysql-virtual-mailbox-domains.cf
 apply_easymail_configs /etc/opendkim.conf
 
 # Reload services
-service nginx restart 
+service nginx restart
 service dovecot reload
 service postfix reload
-	
+
 # Set HOSTNAME Management API
 apply_easymail_configs /opt/easymail/ManagementAPI/config.ini
 
@@ -173,6 +173,4 @@ echo "Run ManagementAPI"
 echo "Add new configurations to easymail config file"
 apply_easymail_configs $EASYMAIL_CONFIG
 
-update-ca-certificates
-
-
+# update-ca-certificates
